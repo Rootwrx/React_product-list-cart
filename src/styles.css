@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+body {
+  overflow-x: hidden;
+}
+button {
+  cursor: pointer;
+}
+
+.container {
+  width: 100%;
+  max-width: 95%;
+}
