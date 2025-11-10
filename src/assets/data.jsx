@@ -183,3 +183,19 @@ export const PRODUCTS = [
 
 export const CATEGORIES = [...new Set(PRODUCTS.map((p) => p.category))];
 export const DIETARIES = [...new Set(PRODUCTS.map((p) => p.dietary).flat())];
+
+
+export const FILTERS = {
+  DIETARIES:"DIETARIES" ,
+  CATEGORIES:"CATEGORIES"
+}
+
+export const toggleCheckBox = (type, value, setCheckedFilters) => {
+  setCheckedFilters((prev) => ({
+    ...prev,
+    [type]:
+      prev[type].includes(value) ?
+        prev[type].filter((el) => el !== value)
+      : [...prev[type], value],
+  }));
+};

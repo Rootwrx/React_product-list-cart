@@ -1,41 +1,36 @@
 import { useState } from "react";
-import { PRODUCTS } from "./assets/data";
+import { FILTERS, PRODUCTS, toggleCheckBox } from "./assets/data";
 import { SideBar } from "./SideBar";
 import { Header } from "./Header";
 import { Content } from "./Content";
 import Cart from "./Cart";
 
 export default function App() {
-  const [checkedCategories, setCheckedCategories] = useState([]);
-  const [checkedDietaries, setCheckedDietaries] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [checkedFilters, setCheckedFilters] = useState({
+    [FILTERS.CATEGORIES]: [],
+    [FILTERS.DIETARIES]: [],
+  });
+
   const hanldeToggleCart = () => setIsCartOpen((p) => !p);
 
   const filteredProducts = PRODUCTS.filter((p) => {
     const categoryOk =
-      checkedCategories.length === 0 || checkedCategories.includes(p.category);
+      checkedFilters[FILTERS.CATEGORIES].length === 0 ||
+      checkedFilters[FILTERS.CATEGORIES].includes(p.category);
     const dietaryOk =
-      checkedDietaries.length === 0 ||
-      p.dietary.some((d) => checkedDietaries.includes(d));
+      checkedFilters[FILTERS.DIETARIES].length === 0 ||
+      p.dietary.some((d) => checkedFilters[FILTERS.DIETARIES].includes(d));
     return categoryOk && dietaryOk;
   });
 
-  const toggleValue = (value, set) => {
-    set((prev) =>
-      prev.includes(value) ?
-        prev.filter((el) => el !== value)
-      : [...prev, value]
-    );
+  const handleFilter = (type, value) => {
+    toggleCheckBox(FILTERS[type], value, setCheckedFilters);
   };
 
-  const handleFilterByDietary = (d) => toggleValue(d, setCheckedDietaries);
-  const handleFilterByCategory = (d) => toggleValue(d, setCheckedCategories);
-
-  const handleAddToCart = (product) => {
-    product = { ...product, quantity: 1 };
-    setCartItems((prev) => [...prev, product]);
-  };
+  const handleAddToCart = (product) =>
+    setCartItems((prev) => [...prev, { ...product, quantity: 1 }]);
 
   const hanldeChangeQuantity = (id, op) => {
     const index = cartItems.findIndex((el) => el.id === id);
@@ -56,12 +51,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-50">
       <Header onToggleCart={hanldeToggleCart} />
       <main className="container mx-auto flex gap-8 mt-10">
-        <SideBar
-          checkedDietaries={checkedDietaries}
-          checkedCategories={checkedCategories}
-          onFilterByCategory={handleFilterByCategory}
-          onFilterByDietary={handleFilterByDietary}
-        />
+        <SideBar checkedFilters={checkedFilters} onFilter={handleFilter} />
         <Content
           onDeleteItem={handleDeleteItem}
           onChangeQuantity={hanldeChangeQuantity}

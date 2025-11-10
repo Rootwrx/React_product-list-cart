@@ -6,7 +6,7 @@ const Cart = ({
   setIsCartOpen,
   onDeleteItem,
   onChangeQuantity,
-  onClearCart, // new prop
+  onClearCart,
 }) => {
   const numberOfItems = cartItems.reduce((acc, el) => acc + el.quantity, 0);
   const totalPrice = cartItems.reduce(
@@ -67,7 +67,12 @@ const Cart = ({
           <div className="mt-4 border-t pt-4 flex flex-col gap-3">
             <div className="flex justify-between font-semibold text-gray-800">
               <span>Total:</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(totalPrice)}
+              </span>
             </div>
 
             {/* Clear Cart Button */}

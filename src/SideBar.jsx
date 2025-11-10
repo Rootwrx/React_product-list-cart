@@ -1,24 +1,19 @@
 import { FilterSection } from "./FilterSection";
-import { CATEGORIES, DIETARIES } from "./assets/data";
+import { CATEGORIES, DIETARIES, FILTERS } from "./assets/data";
 
-export const SideBar = ({
-  onFilterByCategory,
-  onFilterByDietary,
-  checkedDietaries,
-  checkedCategories,
-}) => (
+export const SideBar = ({ onFilter, checkedFilters }) => (
   <aside className="w-fit bg-white p-5 rounded-xl shadow-sm border border-gray-200 space-y-8 h-fit">
     <FilterSection
-      title="Category"
+      title="Categories"
       options={CATEGORIES}
-      checked={checkedCategories}
-      onChange={onFilterByCategory}
+      checked={checkedFilters[FILTERS.CATEGORIES]}
+      onChange={(v) => onFilter(FILTERS.CATEGORIES, v)}
     />
     <FilterSection
       title="Dietaries"
       options={DIETARIES}
-      checked={checkedDietaries}
-      onChange={onFilterByDietary}
+      checked={checkedFilters[FILTERS.DIETARIES]}
+      onChange={(v) => onFilter(FILTERS.DIETARIES, v)}
     />
   </aside>
 );
